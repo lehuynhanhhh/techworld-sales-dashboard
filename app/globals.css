@@ -1,26 +1,635 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   app/globals.css — CHÉP NGUYÊN VĂN, KHÔNG SỬA, KHÔNG "CẢI TIẾN"
+
+   Hệ: Monochrome Near-White Analytics Design System
+   Trích từ bản chuẩn: docs/syllabus/AIDA/B5&6/prototype/design-systems/_base.html
+
+   Mọi con số px ở đây là hợp đồng bố cục — đổi một số là hỏng giao kèo
+   "mọi máy ra cùng một kết quả". Khối token bên dưới được trích tự động
+   từ bản chuẩn, không gõ tay.
+
+   ⚠ File này KHÔNG còn là Apple Liquid Glass. Nếu bạn thấy --canvas gradient,
+   --glass-bg, backdrop-filter hay --r-card:16px ở đâu đó, đó là bản cũ.
+   ═══════════════════════════════════════════════════════════════════════════ */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOKEN — trích nguyên văn từ _base.html
+   Sửa hai khối này là đổi cả design system. Xem references/design-tokens.md
+   trước khi sửa, đặc biệt mục "Bí danh tương thích".
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root{
+  /* ── Ba sắc độ nền ────────────────────────────────────────────── */
+  --page:#E9E9EA;        /* nền ngoài shell                              */
+  --shell:#FFFFFF;       /* khung app                                    */
+  --card:#FFFFFF;
+  --sub:#FAFAFA;         /* nền thumbnail, hover, ô nhập                  */
+  --sub2:#F4F4F5;
+  --line:#EBEBEC;        /* viền hairline — gần như không thấy           */
+  --line2:#F2F2F3;
+
+  /* ── Ba sắc độ mực ────────────────────────────────────────────── */
+  --ink:#191A1C; --ink2:#4A4C50; --ink3:#65676C;
+
+  --brand:#3D5AFE; --brand-600:#2E48E0; --brand-50:#F0F2FF;
+  --on-brand:#FFFFFF;
+
+  /* ── Tín hiệu — CHỈ cho thứ CÓ NGƯỠNG, không bao giờ cho chuỗi dữ liệu ── */
+  --ok:#107D4C;   --ok-bg:#E8F5EE;
+  --warn:#B45309; --warn-bg:#FDF3E7;
+  --bad:#C62B3C;  --bad-bg:#FBEBEC;
+
+  /* Không có token màu thương hiệu. Mọi dimension — kênh, chiến dịch, sản
+     phẩm — tô theo thang --series-* bên dưới. Ô icon .sq lấy nền --sub2 +
+     mực --ink2, giống mọi chip khác trong hệ. */
+
+  /* ── Chuỗi dữ liệu — thang MỰC 5 bậc, không màu ────────────────────────
+     Hạng 1 xuống --focus (mực đậm nhất) vì nó là thứ nên bấm vào xem tiếp.
+     Nhờ series không mang màu, ok/warn/bad nổi bật tuyệt đối khi xuất hiện. */
+  --series-1:#2E3033; --series-2:#55585D; --series-3:#83868C;
+  --series-4:#AFB2B7; --series-5:#D3D5D8;
+  --focus:#191A1C;
+
+  --r-shell:20px; --r-card:11px; --r-inner:9px; --r-menu:9px; --r-sm:7px;
+  --r-sheet:14px; --r-pill:999px;
+  --sh-card:0 1px 2px rgba(18,20,24,.03);
+  --sh-pop:0 14px 38px -10px rgba(18,20,24,.16), 0 2px 6px rgba(18,20,24,.05);
+  --sh-shell:0 22px 56px -22px rgba(18,20,24,.22);
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,'JetBrains Mono',Consolas,monospace;
+
+  /* ── Bí danh tương thích ───────────────────────────────────────────────
+     Lớp JS vẽ chart gọi CSS('--label2'), CSS('--fill4')… từ hệ cũ. Ánh xạ
+     chúng về hệ mới tại MỘT chỗ, thay vì sửa 40+ lời gọi rải rác — và nhờ
+     vậy không tồn tại đường nào lọt lại bảng màu cũ. */
+  --label:var(--ink); --label2:var(--ink2); --label3:var(--ink3); --label4:var(--line);
+  --bg:var(--card); --bg-grouped:var(--page);
+  --separator:var(--line); --separator-opaque:var(--line);
+  --fill:#DCDDDF; --fill2:var(--sub2); --fill3:var(--sub2); --fill4:var(--line2);
+  --blue:var(--brand); --green:var(--ok); --red:var(--bad); --orange:var(--warn);
+  --gray:var(--ink3); --gray3:var(--line);
+  --lift-sm:var(--sh-card); --lift:var(--sh-pop);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="dark"]{
+  /* Ảnh tham chiếu không có dark. Nhưng luật màu của nó — đơn sắc, tương phản
+     thấp, màu chỉ ở icon và pill — đảo được nguyên vẹn; đảo được thì mới
+     chứng minh đó là một LUẬT chứ không phải một bảng màu. */
+  --page:#0A0A0B; --shell:#131315; --card:#131315; --sub:#191A1C; --sub2:#1F2023;
+  --line:#232427; --line2:#1C1D20;
+  --ink:#F2F3F5; --ink2:#9B9EA4; --ink3:#86898F;
+  --brand:#7C90FF; --brand-600:#6478F5; --brand-50:#1A1E33; --on-brand:#0C1023;
+  --ok:#34C98A; --ok-bg:#0E2A1F; --warn:#E5A93B; --warn-bg:#2A1E0B;
+  --bad:#FF7080; --bad-bg:#2C1517;
+  --series-1:#E3E5E8; --series-2:#B6B9BE; --series-3:#8A8D93;
+  --series-4:#63666B; --series-5:#44464B;
+  --focus:#F2F3F5;
+  --fill:#34363A;
+  --sh-card:0 1px 2px rgba(0,0,0,.4);
+  --sh-pop:0 18px 44px -12px rgba(0,0,0,.62), 0 2px 6px rgba(0,0,0,.4);
+  --sh-shell:0 22px 56px -22px rgba(0,0,0,.7);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOÀN BỘ CSS COMPONENT — trích nguyên văn từ _base.html
+   499 dòng dưới đây đã chạy thật trên bản chuẩn và trên cả sáu biến thể
+   design system. Không viết lại, không rút gọn, không chuyển sang Tailwind.
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+   Ở đây có đủ những thứ dễ bị bỏ sót khi dựng lại từ mô tả:
+   checkbox · radio · switch · tooltip · ô ngày · nội thất drawer ·
+   bảng xuất dữ liệu · màn đăng nhập · thanh dung lượng · hàng xếp hạng ·
+   overlay scrollbar · bốn trạng thái runtime.
+
+   ⚠ HAI CHỖ NEXT.JS KHÁC HTML THUẦN
+
+   1. #viewport và #stage
+      Bản chuẩn là HTML thuần nên #stage nằm thẳng trong body. Ở Next.js,
+      components/Shell.tsx dựng #viewport bọc #stage. Quy tắc giữ nguyên:
+      #viewport mang --page, #stage mang --shell + --r-shell + --sh-shell,
+      và lề ngoài sinh bằng thuộc tính `scale` trên #viewport — KHÔNG phải
+      `transform`, vì hàm fit gán transform:scale() vào style INLINE của
+      #stage và inline luôn thắng CSS.
+
+   2. Thứ tự .card / .card.kpi
+      .card.kpi PHẢI đứng sau .card. Cùng độ đặc hiệu thì cái sau thắng;
+      đảo thứ tự là thẻ KPI phình khỏi băng 118px và cắt mất hàng chân.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HỆ THIẾT KẾ — ĐƠN SẮC GẦN TRẮNG (port từ console-prototype.html)
+   Thay cho hệ Apple Liquid Glass trước đây. Ba thay đổi gốc rễ:
+     1 · Nền là MỘT MÀU PHẲNG, không gradient. Không còn kính, không backdrop-filter.
+     2 · Chỉ ba sắc độ nền (page / card / sub) và ba sắc độ mực (ink / ink2 / ink3).
+         Mọi thứ khác dựng từ sáu biến đó.
+     3 · Màu thương hiệu (--brand) KHÔNG trải trên nền lớn: chỉ logo, nút chính,
+         và viền focus. Không ngoại lệ: mọi màu đều là token của hệ.
+   Vì sao đổi: kính đọc được là nhờ có màu phía sau, nên nó buộc nền phải là
+   gradient — mà gradient thì làm mọi con số 11px đổi độ tương phản theo vùng.
+   Hệ này bỏ cả hai thứ đó cùng lúc.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--sans);color:var(--ink);background:var(--page);
+     -webkit-font-smoothing:antialiased;font-size:13px;line-height:1.4}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input,select{font:inherit;color:inherit}
+[hidden]{display:none!important}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-thumb{background:var(--fill);border-radius:7px}
+::-webkit-scrollbar-track{background:transparent}
+/* Giao diện tương phản thấp thì viền focus mặc định gần như không thấy.
+   Dùng brand vì đây là chỗ duy nhất brand được phép chen vào: nó không mang
+   nghĩa tốt/xấu, nó chỉ nói "bàn phím đang ở đây". */
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:5px}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CANVAS CỐ ĐỊNH 1600×900 + scale
+   Giữ nguyên từ bản trước: mọi kích thước bên trong là px CỨNG ⇒ layout giống
+   nhau từng pixel trên mọi máy, và không bao giờ phải cuộn trang.
+   Khác một điểm: #stage giờ LÀ cái shell trắng (một mặt phẳng duy nhất), thay
+   cho hai panel kính rời trước đây.
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* `scale` sinh lề quanh shell — đây là thứ bản chuẩn HTML thuần KHÔNG có.
+   Phải là `scale` chứ không phải `transform`: hàm fit gán transform:scale()
+   vào style INLINE của #stage, mà inline thắng mọi khai báo trong stylesheet.
+   `scale` là thuộc tính RỜI nên trình duyệt NHÂN hai phép co giãn với nhau.
+     #viewport{scale:.94}              đúng
+     #viewport{transform:scale(.94)}   sai — bị inline của #stage đè
+   So với padding cố định: lề bằng scale co theo cửa sổ nên không bao giờ âm. */
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+          background:var(--page);overflow:hidden;scale:.94}
+#stage,#login{width:1600px;height:900px;flex:0 0 auto;transform-origin:center center;
+       position:relative;display:flex;overflow:hidden;
+       background:var(--shell);border-radius:var(--r-shell);box-shadow:var(--sh-shell)}
+#stage[hidden],#login[hidden]{display:none}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TRANG ĐĂNG NHẬP — MỘT CARD CANH GIỮA
+   Trang này chỉ có MỘT việc: bấm một nút. Nút là phần tử lớn nhất trên màn
+   hình và nằm đúng giữa. #login dùng chung hộp 1600×900 và chung hệ số scale
+   với #stage ⇒ nền không nhảy khi chuyển màn.
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* Nền màn đăng nhập là --sub chứ không phải --shell: một card trắng đặt trên
+   nền trắng thì chỉ còn viền hairline giữ nó lại, và ở màn hình xa thì không
+   còn gì. --sub vẫn nằm trong ba sắc độ nền của hệ, nên không phá luật. */
+#login{align-items:center;justify-content:center;background:var(--sub)}
+.logincard{width:440px;padding:40px 44px 30px;border-radius:var(--r-sheet);text-align:center;
+       background:var(--card);border:1px solid var(--line);box-shadow:var(--sh-pop)}
+.loginbrand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px}
+.lmark{width:28px;height:28px;flex:0 0 28px;border-radius:8px;background:var(--brand);
+       color:var(--on-brand);display:flex;align-items:center;justify-content:center}
+.loginbrand b{font-size:14.5px;font-weight:600;letter-spacing:-.02em}
+.logincard h1{font-size:23px;font-weight:600;letter-spacing:-.03em;line-height:1.25;
+       margin-bottom:9px}
+.logincard .lead{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:24px}
+
+/* ── Nút Google — phần tử LỚN NHẤT trên màn hình ───────────────────────────
+   Với NextAuth.js ta gọi signIn('google') từ nút của mình, KHÔNG dùng nút do
+   thư viện Google Identity Services sinh ra (nút đó khoá cứng ≤44px cao).
+   Nhưng vẫn phải theo quy định nhận diện của Google cho nút tự dựng:
+   logo G 4 màu bản chính thức · nền #FFFFFF · viền #747775 · chữ Roboto
+   Medium · nhãn đúng chuỗi Google phát hành cho tiếng Việt. */
+#gbtn{width:100%;height:50px;border-radius:var(--r-pill);background:#FFFFFF;
+      border:1px solid #747775;display:flex;align-items:center;justify-content:center;gap:12px;
+      font-family:'Roboto',var(--sans);font-size:15px;font-weight:500;color:#1F1F1F;
+      transition:background .15s ease,box-shadow .15s ease}
+#gbtn:hover{background:#F7F8F8;box-shadow:0 1px 2px rgba(60,64,67,.30),0 1px 3px 1px rgba(60,64,67,.15)}
+#gbtn:active{background:#EFF0F0}
+#gbtn:disabled{opacity:.55;pointer-events:none}
+#gbtn svg{flex:0 0 20px}
+[data-theme="dark"] #gbtn{background:#131314;border-color:#8E918F;color:#E3E3E3}
+[data-theme="dark"] #gbtn:hover{background:#1E1F20}
+.spin{width:16px;height:16px;flex:0 0 16px;border-radius:50%;
+      border:2px solid var(--line);border-top-color:var(--ink);
+      animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* Card canh giữa nhưng khối chữ dài PHẢI canh trái — chữ căn giữa nhiều dòng
+   thì mỗi dòng bắt đầu ở một chỗ khác nhau, mắt phải dò lại từ đầu mỗi dòng. */
+.note{display:flex;gap:9px;margin-top:18px;padding:11px 13px;border-radius:var(--r-inner);
+      background:var(--sub);border:1px solid var(--line);
+      font-size:11.5px;color:var(--ink2);line-height:1.55;text-align:left}
+.note i{flex:0 0 auto;font-style:normal;color:var(--ink3)}
+/* Trạng thái lỗi — bắt buộc nêu RÕ email nào bị từ chối, kèm cách đổi tài khoản */
+.err{margin-top:18px;padding:12px 14px;border-radius:var(--r-inner);text-align:left;
+     background:var(--bad-bg);border:1px solid color-mix(in srgb,var(--bad) 24%,transparent);
+     font-size:12px;line-height:1.55;color:var(--ink2)}
+.err b{display:block;font-size:12.5px;margin-bottom:4px;color:var(--bad);font-weight:600}
+.err code{font-family:var(--mono);font-size:11.5px;background:var(--card);
+          border:1px solid var(--line);padding:1px 5px;border-radius:5px;color:var(--ink)}
+.err button{margin-top:9px;font-size:12px;font-weight:600;color:var(--ink);
+            text-decoration:underline;text-underline-offset:3px}
+.legal{margin-top:22px;font-size:10.5px;color:var(--ink3);line-height:1.6;text-align:center}
+.legal a{color:var(--ink2);text-decoration:underline}
+
+/* Dải mô phỏng — CHỈ có trong prototype, bản thật xoá đi.
+   Cần nó để duyệt được cả 3 nhánh kết quả mà không dựng OAuth thật. */
+#simbar{position:absolute;left:22px;bottom:22px;z-index:5;display:flex;align-items:center;gap:8px;
+        padding:7px 11px;border-radius:var(--r-pill);background:var(--card);
+        border:1px solid var(--line);box-shadow:var(--sh-card);
+        font-size:11px;color:var(--ink3)}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SIDEBAR — hẹp và dày. 206px, hàng 28px, nhóm có nhãn chữ nhỏ.
+   Không còn là panel rời: nó nằm TRONG shell, ngăn với nội dung bằng đúng
+   một đường hairline 1px. Bề rộng 206 (rail 58) là hằng số của LAY().
+   ═══════════════════════════════════════════════════════════════════════════ */
+#side{width:206px;flex:0 0 206px;display:flex;flex-direction:column;min-width:0;
+      border-right:1px solid var(--line);padding:12px 10px 10px}
+#stage.rail #side{width:58px;flex-basis:58px;padding-left:8px;padding-right:8px}
+#stage.rail .brandtxt,#stage.rail .nvt,#stage.rail .nav .bdg,
+#stage.rail .usage,#stage.rail .acct .at,#stage.rail .acct>.lu{display:none}
+#stage.rail .brand{flex-direction:column;height:auto;gap:6px;padding:2px 0 0}
+#stage.rail #collapse{margin-left:0}
+#stage.rail #collapse .lu{transform:rotate(180deg)}
+#stage.rail .nav{justify-content:center;padding:0}
+#stage.rail .lbl{font-size:0;height:1px;background:var(--line);margin:10px 6px;overflow:hidden}
+#stage.rail .acct{justify-content:center;padding:6px 0}
+
+.brand{display:flex;align-items:center;gap:8px;padding:2px 4px 0;height:30px}
+.mark{width:22px;height:22px;flex:0 0 22px;border-radius:6px;color:var(--on-brand);
+      background:var(--brand);display:flex;align-items:center;justify-content:center}
+.brandtxt b{display:block;font-size:13.5px;font-weight:600;letter-spacing:-.02em;
+            line-height:1.2;white-space:nowrap;overflow:hidden}
+.brandtxt span{display:none}   /* dòng phụ "Digital marketing" — thừa ở mật độ này */
+#collapse{margin-left:auto;width:24px;height:24px;flex:0 0 24px;border-radius:var(--r-sm);
+          color:var(--ink3);display:flex;align-items:center;justify-content:center}
+#collapse:hover{background:var(--sub2);color:var(--ink)}
+
+#nav{flex:1;min-height:0;overflow-y:auto;margin-top:14px}
+.lbl{font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;
+     color:var(--ink3);padding:0 6px;margin:12px 0 5px;white-space:nowrap}
+.lbl:first-child{margin-top:0}
+.nav{width:100%;height:28px;display:flex;align-items:center;gap:8px;padding:0 7px;
+     border-radius:var(--r-sm);font-size:12.5px;color:var(--ink2);text-align:left;
+     white-space:nowrap;margin-bottom:1px}
+.nav:hover{background:var(--sub2);color:var(--ink)}
+/* Trang đang mở dùng NỀN, không dùng màu brand. Một thanh nav xanh đặc là
+   mảng màu lớn nhất màn hình, và nó tranh mất chỗ của thứ duy nhất đáng nổi
+   bật trong dashboard: con số vượt ngưỡng. */
+.nav.on{background:var(--sub2);color:var(--ink);font-weight:500}
+.nav .ic{width:16px;flex:0 0 16px;display:flex;align-items:center;justify-content:center;
+         color:var(--ink3)}
+.nav.on .ic{color:var(--ink)}
+.nav .ic .lu{width:14px;height:14px}
+.nav .nvt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.nav .bdg{font-size:10px;font-weight:600;color:var(--ink3);background:var(--sub2);
+          border-radius:var(--r-pill);padding:1px 5px;min-width:17px;text-align:center;
+          font-variant-numeric:tabular-nums}
+.nav.on .bdg{background:var(--card);border:1px solid var(--line)}
+.nav .bdg.alert{color:var(--warn);background:var(--warn-bg)}
+
+/* ── Đáy sidebar: đồng hồ dữ liệu + hàng tài khoản ─────────────────────────
+   Tài khoản chuyển từ góc trên phải (bản Liquid Glass) xuống đây. Lý do:
+   header giờ chỉ cao 46px và phải chứa bộ lọc + xuất dữ liệu + cảnh báo —
+   nhồi thêm tên người dùng vào đó thì không còn chỗ cho hành động nào.
+   Hai con số của đồng hồ TÍNH TỪ ROWS, không gõ tay. */
+.sfoot{margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.usage{padding:8px 7px 10px}
+.uhd{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink2);white-space:nowrap}
+.uhd b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.utrack{height:3px;border-radius:3px;background:var(--sub2);margin:7px 0 6px;overflow:hidden}
+.ufill{height:100%;border-radius:3px;background:var(--ink)}
+.unote{font-size:10.5px;color:var(--ink3);line-height:1.4}
+.ubtn{width:100%;height:28px;margin-top:8px;border-radius:var(--r-sm);
+      background:var(--ink);color:var(--shell);font-size:12px;font-weight:600}
+.ubtn:hover{opacity:.86}
+.acct{width:100%;display:flex;align-items:center;gap:8px;padding:6px 7px;
+      border-radius:var(--r-sm);text-align:left}
+.acct:hover{background:var(--sub2)}
+.av{width:24px;height:24px;flex:0 0 24px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-size:10.5px;font-weight:600;color:var(--on-brand);
+    background:var(--brand)}
+.acct .at{flex:1;min-width:0;overflow:hidden}
+.acct .an{display:block;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;
+          text-overflow:ellipsis}
+.acct .ae{display:block;font-size:10.5px;color:var(--ink3);white-space:nowrap;
+          overflow:hidden;text-overflow:ellipsis}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MAIN + HEADER
+   ═══════════════════════════════════════════════════════════════════════════ */
+#main{flex:1;min-width:0;display:flex;flex-direction:column;position:relative}
+#top{height:46px;flex:0 0 46px;display:flex;align-items:center;gap:9px;padding:0 14px;
+     border-bottom:1px solid var(--line);position:relative;z-index:20}
+/* Breadcrumb: icon của trang + tên trang. Cùng một hàng với mọi hành động. */
+.htitle{display:flex;align-items:center;gap:7px;min-width:0;font-size:12.5px;color:var(--ink2)}
+.htitle .lu{color:var(--ink3)}
+.htitle b{font-size:12.5px;font-weight:500;color:var(--ink);white-space:nowrap;
+          overflow:hidden;text-overflow:ellipsis}
+.topright{display:flex;align-items:center;gap:7px;margin-left:auto}
+.sync{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink3);
+      white-space:nowrap;padding-right:3px}
+.sync b{color:var(--ink2);font-weight:500;font-variant-numeric:tabular-nums}
+.led{width:6px;height:6px;border-radius:50%;background:var(--ok);transition:background .2s ease}
+.led.busy{background:var(--warn)}
+@keyframes osspin{to{transform:rotate(360deg)}}
+.ibtn.spin .lu{animation:osspin .52s linear}
+@keyframes syncflash{0%{background:var(--sub2)}100%{background:transparent}}
+.sync b.flash{border-radius:5px;padding:0 3px;margin:0 -3px;animation:syncflash .7s ease}
+
+/* Nút header: pill viền hairline, nền card. Chỉ MỘT nút được tô brand —
+   "Bộ lọc", vì nó là hành động chính của một dashboard theo dõi. */
+.ibtn{position:relative;height:29px;min-width:29px;padding:0 12px;border-radius:var(--r-pill);
+      border:1px solid var(--line);background:var(--card);color:var(--ink2);font-size:12px;
+      display:flex;align-items:center;gap:6px;justify-content:center;white-space:nowrap}
+.ibtn:hover{color:var(--ink);background:var(--sub)}
+.ibtn.pri{background:var(--brand);border-color:var(--brand);color:var(--on-brand);font-weight:600}
+.ibtn.pri:hover{background:var(--brand-600);border-color:var(--brand-600);color:var(--on-brand)}
+.ibtn.icon{width:29px;padding:0}
+.ibtn s{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;
+        border-radius:var(--r-pill);background:var(--bad);color:#fff;font-size:9.5px;
+        font-weight:600;text-decoration:none;display:flex;align-items:center;justify-content:center}
+.wrap{position:relative}
+
+/* Popover — dùng chung cho cảnh báo (header) và tài khoản (sidebar) */
+.pop{position:absolute;top:36px;right:0;width:264px;padding:5px;z-index:40;
+     background:var(--card);border:1px solid var(--line);border-radius:var(--r-menu);
+     box-shadow:var(--sh-pop)}
+.pop.up{top:auto;bottom:36px;right:auto;left:0;width:214px}
+.pop .h{font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;
+        color:var(--ink3);padding:8px 9px 4px}
+.pop .r{display:flex;align-items:center;gap:9px;height:30px;padding:0 9px;font-size:12.5px;
+        border-radius:var(--r-sm);width:100%;text-align:left;color:var(--ink)}
+.pop .r .lu{color:var(--ink3)}
+.pop .r i{width:7px;height:7px;border-radius:50%;flex:0 0 7px}
+.pop .r b{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600}
+.pop button.r:hover{background:var(--sub2)}
+.pop .sep{height:1px;background:var(--line);margin:4px 0}
+
+/* ── Grid nội dung — CHIỀU CAO HARDCODE ───────────────────────────────────
+   46(header) + 20 + 52 + 14 + 118 + 14 + 301 + 14 + 301 + 20 = 900 */
+#body{flex:1;min-height:0;padding:20px 24px;display:flex;flex-direction:column;gap:14px;
+      overflow:hidden}
+#greet{height:52px;flex:0 0 52px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+#kpis{height:118px;flex:0 0 118px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+/* Row 2 và Row 3 CAO BẰNG NHAU ⇒ 4 card chart cùng một chiều cao vẽ */
+#row2{height:301px;flex:0 0 301px;display:flex;gap:14px}
+#row3{height:301px;flex:0 0 301px;display:flex;gap:14px}
+/* Trang "Nguồn dữ liệu" ẩn băng KPI ⇒ dư đúng 132px ở đáy. Hai hàng còn lại
+   giãn ra lấp chỗ đó, thay vì để một vệt trắng không ai giải thích được.
+   Chỉ trang này mới bỏ px cứng — ba trang theo dõi vẫn phải khoá pixel để
+   bốn chart cao bằng nhau. */
+#body.nokpi #row2,#body.nokpi #row3{flex:1 1 0;height:auto}
+/* Lời chào TRƯỚC, dòng bối cảnh SAU — người đọc cần biết mình đang ở đâu
+   trước khi cần biết kỳ nào. 24 + 4 + 15 ≈ 43, vừa băng 52px. */
+.ghi{font-size:20px;font-weight:600;letter-spacing:-.03em;line-height:1.2;
+     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gday{font-size:11px;color:var(--ink3);margin-top:4px;white-space:nowrap;
+      overflow:hidden;text-overflow:ellipsis}
+
+/* ── Card ────────────────────────────────────────────────────────────────
+   Viền hairline + bóng gần như không thấy. Không kính, không blur: số liệu
+   phải nằm trên một nền ổn định thì 11px mới đọc được. */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);
+      box-shadow:var(--sh-card);padding:14px;display:flex;flex-direction:column;
+      min-width:0;overflow:hidden}
+.ct{font-size:13px;font-weight:600;letter-spacing:-.015em;line-height:1.25}
+.cs{font-size:11px;color:var(--ink3);margin-top:3px;line-height:1.4}
+.chead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+       height:43px;flex:0 0 43px}
+.plot{flex:1;min-height:0;min-width:0}
+.plot svg{display:block}
+
+/* ── KPI ─────────────────────────────────────────────────────────────────
+   26(nhãn) + 32(số + pill) + 34(sparkline) + 26(chân) = 118 đúng bằng băng. */
+.kpi{padding:0}
+.kl{height:26px;flex:0 0 26px;display:flex;align-items:center;gap:7px;padding:0 13px;
+    font-size:11.5px;color:var(--ink2)}
+.kv{height:32px;flex:0 0 32px;display:flex;align-items:baseline;gap:8px;padding:0 13px;
+    font-size:23px;font-weight:600;letter-spacing:-.035em;line-height:1;
+    font-variant-numeric:tabular-nums}
+/* Pill delta — nền nhạt, không phải chữ màu trần. Ở mật độ này một chữ xanh
+   11px lẫn vào chữ xám 11px bên cạnh; cái pill thì không lẫn. */
+.del{font-size:10.5px;font-weight:600;border-radius:var(--r-pill);padding:2px 6px;
+     display:inline-flex;align-items:center;gap:2px;line-height:1.25}
+.del.u{color:var(--ok);background:var(--ok-bg)}
+.del.d{color:var(--bad);background:var(--bad-bg)}
+.del.n{color:var(--ink3);background:var(--sub2)}
+.del .lu{width:10px;height:10px;stroke-width:2.6}
+.kspark{height:34px;flex:0 0 34px;padding:0 13px}
+/* Chân thẻ tách bằng hairline. Nội dung là NGƯỠNG, không phải chú thích cho đẹp. */
+.ks{height:26px;flex:0 0 26px;display:flex;align-items:center;gap:6px;padding:0 13px;
+    margin-top:auto;border-top:1px solid var(--line2);font-size:10.5px;color:var(--ink3)}
+.ks .lu{flex:0 0 auto}
+.ks.ok .lu{color:var(--ok)}
+.ks.bad .lu{color:var(--bad)}
+.ks.bad{color:var(--ink2)}
+
+/* ── Segmented control ───────────────────────────────────────────────────── */
+.seg{display:flex;gap:2px;background:var(--sub2);border-radius:var(--r-pill);padding:2px;
+     flex:0 0 auto}
+.seg button{font-size:11.5px;padding:0 11px;height:24px;border-radius:var(--r-pill);
+            color:var(--ink2);white-space:nowrap}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--card);color:var(--ink);font-weight:600;box-shadow:var(--sh-card)}
+.seg.sm button{font-size:11px;padding:0 10px;height:22px}
+
+/* ── Chip bộ lọc đang áp ─────────────────────────────────────────────────── */
+.chips{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;overflow:hidden}
+.chip{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 8px;
+      border-radius:var(--r-pill);border:1px solid var(--line);background:var(--sub);
+      font-size:11.5px;color:var(--ink2);white-space:nowrap}
+.chip:hover{border-color:var(--ink3);color:var(--ink)}
+.chip b{font-weight:600}
+.chip button{font-size:11.5px;color:var(--ink3);display:inline-flex;align-items:center}
+.chip button:hover{color:var(--ink)}
+
+/* ── Bảng ────────────────────────────────────────────────────────────────── */
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+         color:var(--ink3);text-align:right;padding:6px 9px;position:sticky;top:0;
+         background:var(--sub);white-space:nowrap;z-index:2;
+         border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+thead th:first-child{text-align:left}
+tbody td{padding:5px 9px;border-bottom:1px solid var(--line2);text-align:right;
+         font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody td:first-child{text-align:left;font-weight:500}
+tbody tr:hover td{background:var(--sub)}
+tfoot td{padding:6px 9px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums;
+         border-top:1px solid var(--line);background:var(--sub)}
+tfoot td:first-child{text-align:left}
+/* Ô nhiệt: mực pha loãng, không phải màu. Đậm = cao. CPL là chỉ số NGƯỢC nên
+   nó — và chỉ nó — được pha bằng --bad. */
+.heat{border-radius:5px;padding:2px 7px;display:inline-block;min-width:58px;text-align:right}
+.tscroll{flex:1;min-height:0;overflow-y:auto;margin-top:2px}
+th.srt{cursor:pointer} th.srt:hover{color:var(--ink)}
+.role{font-size:9.5px;font-weight:600;padding:2px 6px;border-radius:var(--r-pill);
+      background:var(--sub2);color:var(--ink3);letter-spacing:.02em}
+.mono{font-family:var(--mono);font-size:11.5px}
+
+/* ── Ô icon vuông của kênh ────────────────────────────────────────────────
+   16px, bo 4px. Nền và mực lấy từ hệ đang chạy — kênh không có màu riêng. */
+.sq{width:16px;height:16px;flex:0 0 16px;border-radius:4px;display:inline-flex;
+    align-items:center;justify-content:center;background:var(--sub2);vertical-align:-3px}
+.sq .lu{width:10px;height:10px;stroke-width:2.2;color:var(--ink2)}
+.cn{display:flex;align-items:center;gap:8px;min-width:0}
+.cn .nm{overflow:hidden;text-overflow:ellipsis}
+
+/* ── Danh sách xếp hạng / dòng key-value ──────────────────────────────────── */
+.rank{flex:1;min-height:0;display:flex;flex-direction:column;overflow-y:auto;margin-top:2px}
+.rk{width:100%;text-align:left;padding:7px 0;flex:1;display:flex;flex-direction:column;
+    justify-content:center;min-height:36px}
+.rkh{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;
+     margin-bottom:6px;gap:10px}
+.rkh b{font-weight:500}
+.rkh span{color:var(--ink2);white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:600}
+.track{height:4px;border-radius:var(--r-pill);background:var(--sub2);overflow:hidden}
+.fill-b{height:100%;border-radius:var(--r-pill)}
+.rk:hover .rkh b,.rk.sel .rkh b{color:var(--ink)}
+
+/* ── Chú giải (legend) ────────────────────────────────────────────────────
+   Nằm TRÊN chart, căn trái. CHỈ có ở donut và line nhiều đường.
+   Nội dung chỉ là màu ↔ tên nhóm — số liệu đã ở tooltip và bảng. */
+.lgd{flex:0 0 24px;height:24px;display:flex;flex-wrap:wrap;align-items:center;
+     align-content:center;gap:4px 14px;font-size:11px;overflow:hidden;white-space:nowrap}
+.lgd.two{flex:0 0 44px;height:44px}
+.lgd .li{display:inline-flex;align-items:center;gap:6px;height:18px;min-width:0}
+.lgd .li i{width:8px;height:8px;flex:0 0 8px;border-radius:2.5px}
+.lgd .li b{font-weight:400;color:var(--ink2);overflow:hidden;text-overflow:ellipsis}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DRAWER BỘ LỌC + SCRIM
+   Trượt từ phải, làm mờ nền phía sau, ẩn HOÀN TOÀN khi đóng (visibility, không
+   chỉ transform — nếu không thì Tab vẫn tới được mọi nút bên trong).
+   ═══════════════════════════════════════════════════════════════════════════ */
+#scrim{position:absolute;inset:0;background:rgba(18,20,24,.26);z-index:50;opacity:0;
+       pointer-events:none;transition:opacity .18s ease}
+[data-theme="dark"] #scrim{background:rgba(0,0,0,.52)}
+#drawer{position:absolute;top:0;right:0;bottom:0;width:330px;z-index:60;
+        padding:16px 18px 18px;background:var(--card);border-left:1px solid var(--line);
+        box-shadow:var(--sh-pop);display:flex;flex-direction:column;overflow-y:auto;
+        transform:translateX(100%);visibility:hidden;
+        transition:transform .26s cubic-bezier(.32,.72,0,1),visibility 0s linear .26s}
+#stage.drawer #scrim{opacity:1;pointer-events:auto}
+#stage.drawer #drawer{transform:none;visibility:visible;
+        transition:transform .26s cubic-bezier(.32,.72,0,1)}
+.grab{display:none}   /* tay nắm kiểu sheet iOS — không thuộc hệ này */
+.dh{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.dh b{font-size:15px;font-weight:600;letter-spacing:-.02em}
+.fl{font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--ink3);margin:16px 0 7px}
+.fin{height:32px;border-radius:var(--r-sm);background:var(--sub);display:flex;
+     align-items:center;justify-content:space-between;padding:0 10px;font-size:12.5px;
+     color:var(--ink);width:100%;border:1px solid var(--line)}
+.fin:focus{border-color:var(--brand);background:var(--card)}
+/* Ô tick vẽ bằng MỰC, không bằng brand: chọn/không chọn không phải tốt/xấu. */
+.cbx{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink2);
+     padding:5px 0;width:100%;text-align:left}
+.cbx:hover{color:var(--ink)}
+.box{width:15px;height:15px;flex:0 0 15px;border-radius:4px;border:1px solid var(--line);
+     display:flex;align-items:center;justify-content:center;color:transparent}
+.box.on{background:var(--ink);border-color:var(--ink);color:var(--shell)}
+.box .lu{width:10px;height:10px;stroke-width:3}
+.cbx span.n{margin-left:auto;font-size:10.5px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.dates{display:flex;gap:9px;margin-top:8px}
+.dates label{flex:1;display:flex;flex-direction:column;gap:5px;font-size:10.5px;color:var(--ink3)}
+.dates input{height:31px;border-radius:var(--r-sm);background:var(--sub);
+             border:1px solid var(--line);padding:0 9px;font-size:12px;color:var(--ink);
+             font-family:var(--sans)}
+.dates input:focus{border-color:var(--brand);background:var(--card)}
+.dfoot{display:flex;gap:9px;margin-top:auto;padding-top:18px}
+/* Nút chính của drawer/modal là MỰC, không phải brand: brand đã dành cho nút
+   "Bộ lọc" ở header, và hai nút brand trên cùng một màn thì không còn nút nào
+   là chính nữa. */
+.dbtn{flex:1;text-align:center;font-size:12.5px;height:34px;border-radius:var(--r-sm);
+      font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.dbtn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink2)}
+.dbtn.ghost:hover{color:var(--ink);border-color:var(--ink3);background:var(--sub)}
+.dbtn.pri{background:var(--ink);color:var(--shell)}
+.dbtn.pri:hover{opacity:.87}
+/* Toggle — thân MỰC khi bật. Xanh systemGreen của bản cũ là màu trạng thái,
+   mà một công tắc bật không phải là "tốt". */
+.sw{width:36px;height:20px;flex:0 0 36px;border-radius:var(--r-pill);background:var(--sub2);
+    border:1px solid var(--line);position:relative;transition:background .16s ease;
+    margin-left:auto}
+.sw i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+      background:var(--ink3);transition:transform .16s ease,background .16s ease}
+.sw.on{background:var(--ink);border-color:var(--ink)}
+.sw.on i{transform:translateX(16px);background:var(--shell)}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODAL XUẤT DỮ LIỆU — hai bước
+   Bấm "Xuất dữ liệu" KHÔNG tải file ngay: mở bảng chọn phạm vi + cột, xem
+   trước số dòng, rồi mới bấm Tải xuống.
+   ═══════════════════════════════════════════════════════════════════════════ */
+#modal{position:absolute;inset:0;z-index:70;display:none;align-items:center;
+       justify-content:center;background:rgba(18,20,24,.26)}
+[data-theme="dark"] #modal{background:rgba(0,0,0,.52)}
+#stage.modal #modal{display:flex}
+.sheet{width:600px;max-height:780px;display:flex;flex-direction:column;overflow:hidden;
+       background:var(--card);border:1px solid var(--line);border-radius:var(--r-sheet);
+       box-shadow:var(--sh-pop)}
+.sh{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 0}
+.sh b{font-size:15px;font-weight:600;letter-spacing:-.02em}
+.sb{flex:1;min-height:0;overflow-y:auto;padding:0 20px 4px}
+.sf{display:flex;align-items:center;gap:10px;padding:14px 20px 16px;
+    border-top:1px solid var(--line)}
+.sf .cs{flex:1;margin:0}
+.sf .dbtn{flex:0 0 auto;padding:0 18px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.rad{display:flex;align-items:center;gap:9px;font-size:12.5px;padding:6px 0;
+     width:100%;text-align:left;color:var(--ink2)}
+.rad:hover{color:var(--ink)}
+.rad .dot{width:15px;height:15px;flex:0 0 15px;border-radius:50%;border:1px solid var(--line);
+          display:flex;align-items:center;justify-content:center}
+.rad .dot::after{content:'';width:7px;height:7px;border-radius:50%;background:transparent}
+.rad.on{color:var(--ink)}
+.rad.on .dot{border-color:var(--ink)} .rad.on .dot::after{background:var(--ink)}
+.rad .n{margin-left:auto;font-size:10.5px;color:var(--ink3);font-variant-numeric:tabular-nums}
+
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+       color:var(--ink2);font-size:12.5px;text-align:center}
+.empty b{font-size:14px;color:var(--ink);margin-bottom:6px;font-weight:600}
+.ok{display:inline-flex;align-items:center;gap:5px;color:var(--ok);font-weight:600}
+
+/* ── Thanh cuộn overlay ───────────────────────────────────────────────────
+   Thanh cuộn hệ thống ĂN chiều rộng layout: nó hiện ra thì mọi biểu đồ trong
+   cột đó bị vẽ lại hẹp đi 8px. Vẽ riêng một cái nổi lên trên thì chiều rộng
+   nội dung không bao giờ đổi. */
+.oscroll{scrollbar-width:none;-ms-overflow-style:none}
+.oscroll::-webkit-scrollbar{width:0;height:0}
+.oscb{position:fixed;z-index:90;width:7px;border-radius:9px;background:var(--ink3);
+      opacity:0;pointer-events:none;transition:opacity .22s ease}
+.oscb.on{opacity:.3;pointer-events:auto}
+.oscb.on:hover,.oscb.drag{opacity:.58}
+
+.tip{position:fixed;pointer-events:none;z-index:80;background:var(--card);
+     border-radius:var(--r-menu);box-shadow:var(--sh-pop);border:1px solid var(--line);
+     padding:9px 11px;font-size:11.5px;opacity:0;transition:opacity .1s}
+.tip b{display:block;font-size:10.5px;color:var(--ink3);font-weight:500;margin-bottom:5px}
+.tip .r{display:flex;align-items:center;gap:7px;margin-top:3px;color:var(--ink2)}
+.tip .r i{width:7px;height:7px;border-radius:50%}
+.tip .r span{margin-left:auto;font-weight:600;font-variant-numeric:tabular-nums;
+             padding-left:16px;color:var(--ink)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ── Toast tự động đồng bộ ────────────────────────────────────────────────
+   Ngoài "Danh sách component" gốc của components.md — bổ sung khi thêm
+   auto-refresh 30 giây, người dùng chọn có thông báo thay vì im lặng.
+   position:absolute bên trong #stage (không phải fixed) để ăn đúng scale()
+   của canvas 1600×900 — .tip từng bị lỗi lệch toạ độ vì dùng fixed (G33). */
+.toast{position:absolute;left:50%;bottom:26px;z-index:85;transform:translate(-50%,8px);
+       display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:var(--r-pill);
+       background:var(--card);border:1px solid var(--line);box-shadow:var(--sh-pop);
+       font-size:12px;color:var(--ink);opacity:0;pointer-events:none;
+       transition:opacity .18s ease,transform .18s ease}
+.toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast i{color:var(--ok);display:flex}
+
+/* ── ICON ─────────────────────────────────────────────────────────────────
+   Một bộ icon duy nhất cho cả dashboard, lưới 24×24, không tô. 33 hình đã
+   nhúng sẵn trong assets/icons.ts — không cài package, không tải gì.
+   Sprite <symbol> nạp một lần ở gốc cây; gọi qua <use href="#i-ten">.
+   Nét 1.7 thay cho 2 của bản trước — hệ này mảnh hơn ở mọi chỗ khác, một
+   icon nét 2px bên cạnh chữ 12px trông đậm hơn cả chữ. */
+.lu{width:16px;height:16px;flex:0 0 auto;display:block;
+    fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.lu-sm{width:14px;height:14px}
+.lu-xs{width:11px;height:11px;stroke-width:2.2}
+.mark .lu{width:13px;height:13px;stroke-width:2}
+.lmark .lu{width:16px;height:16px;stroke-width:2}
+.chip button{display:inline-flex;align-items:center;justify-content:center}
+.box .lu{width:10px;height:10px;stroke-width:3}

@@ -39,3 +39,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# chỉ chứa TÊN biến, không giá trị — deploy_preflight.py đọc file này
+!.env.example
